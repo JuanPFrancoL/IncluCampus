@@ -1,0 +1,223 @@
+/* ===== Colores (variables) =====
+   Todos los colores están aquí. El modo alto contraste solo cambia estas variables. */
+:root {
+  --fondo: #F4F7FA;
+  --superficie: #FFFFFF;
+  --texto: #14212B;
+  --texto-suave: #4A5B68;
+  --azul: #0B3D91;
+  --acento: #0A64C8;
+  --texto-boton: #FFFFFF;
+  --borde: #C7D3DC;
+  --enfoque: #0A64C8;
+  --alerta: #A63D00;
+}
+
+html.alto-contraste {
+  --fondo: #000000;
+  --superficie: #000000;
+  --texto: #FFFFFF;
+  --texto-suave: #FFFFFF;
+  --azul: #FFD400;
+  --acento: #FFD400;
+  --texto-boton: #000000;
+  --borde: #FFFFFF;
+  --enfoque: #FFD400;
+  --alerta: #FFD400;
+}
+
+/* ===== Base ===== */
+html { font-size: 100%; }
+html.letra-grande { font-size: 125%; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: system-ui, "Segoe UI", Arial, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+a { color: var(--azul); }
+
+:focus-visible {
+  outline: 3px solid var(--enfoque);
+  outline-offset: 2px;
+}
+
+/* Enlace para saltar el menú (se ve solo al usar Tab) */
+.salto {
+  position: absolute;
+  left: -999px;
+  top: 0;
+}
+.salto:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+  z-index: 10;
+  background: var(--superficie);
+  padding: 0.75rem 1rem;
+}
+
+/* ===== Cabecera ===== */
+.cabecera {
+  background: var(--superficie);
+  border-bottom: 2px solid var(--borde);
+}
+.cabecera__fila {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+}
+.marca {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+.menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  color: var(--texto);
+  text-decoration: none;
+}
+.menu a:hover { text-decoration: underline; }
+.menu a[aria-current="page"] {
+  font-weight: 700;
+  border-bottom: 3px solid var(--acento);
+}
+
+.herramientas { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.herramientas button {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 2px solid var(--texto);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.herramientas button[aria-pressed="true"] {
+  background: var(--texto);
+  color: var(--superficie);
+}
+
+/* ===== Contenido ===== */
+main {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+main > h1 { font-size: 2rem; margin: 1rem 0 0.5rem; }
+
+.banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.tarjeta {
+  max-width: 40rem;
+  margin: 1.5rem auto;
+  padding: 1.5rem;
+  background: var(--superficie);
+  border: 2px solid var(--borde);
+  border-radius: 12px;
+}
+.tarjeta h1 { margin-top: 0; font-size: 1.75rem; }
+.tarjeta h2 { margin-top: 0; font-size: 1.5rem; }
+
+/* ===== Formularios ===== */
+.campo { margin: 0 0 1.25rem; padding: 0; border: 0; min-width: 0; }
+.campo label, .campo legend {
+  display: block;
+  margin-bottom: 0.35rem;
+  padding: 0;
+  font-weight: 700;
+}
+.campo select,
+.campo input[type="text"],
+.campo input[type="password"] {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 3rem;
+  padding: 0 0.5rem;
+  font: inherit;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 2px solid var(--texto-suave);
+  border-radius: 8px;
+}
+.campo .opcion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  margin: 0;
+  font-weight: 400;
+}
+.opcion input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--acento);
+}
+
+.ayuda { margin: 0.25rem 0 0; font-size: 1rem; color: var(--texto-suave); }
+
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0 1.5rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--texto-boton);
+  background: var(--acento);
+  border: 2px solid var(--acento);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.boton:hover { background: var(--azul); border-color: var(--azul); }
+
+/* Mensajes: llevan texto (no solo color) para que se entiendan sin ver el color */
+.mensaje { margin: 1rem 0 0; padding: 0.75rem 1rem; border: 2px solid var(--borde); border-radius: 8px; }
+.mensaje:empty { display: none; }
+.mensaje--error { border-color: var(--alerta); }
+
+/* ===== Login ===== */
+.login {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr));
+  gap: 1.5rem;
+  margin: 1.5rem 0;
+}
+.login .tarjeta { max-width: none; margin: 0; }
+
+/* ===== Pie ===== */
+.pie {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1rem;
+  color: var(--texto-suave);
+  font-size: 1rem;
+}

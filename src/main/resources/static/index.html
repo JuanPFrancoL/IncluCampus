@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IncluCampus - Inicio</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
 
+<header class="cabecera">
+    <div class="cabecera__fila">
+        <a class="marca" href="index.html">IncluCampus</a>
+
+        <nav aria-label="Principal">
+            <ul class="menu">
+                <li><a href="index.html" aria-current="page">Inicio</a></li>
+                <li><a href="reportar.html">Reportar bloqueo</a></li>
+                <li><a href="bloqueos.html">Bloqueos activos</a></li>
+                <li><a href="login.html">Iniciar sesión</a></li>
+            </ul>
+        </nav>
+
+        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
+            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+        </div>
+    </div>
+</header>
+
+<main id="contenido">
+    <section class="banner">
+        <img src="img/banner.png"
+             alt="IncluCampus, Universidad Autónoma. Un campus para todos: rutas accesibles, información en tiempo real y un campus más inclusivo.">
+    </section>
+
+    <section class="tarjeta" aria-labelledby="titulo-ruta">
+        <h1 id="titulo-ruta">Busca tu ruta</h1>
+
+        <form id="form-ruta" novalidate>
+            <div class="campo">
+                <label for="origen">¿Dónde estás?</label>
+                <select id="origen" name="origen" required></select>
+            </div>
+
+            <div class="campo">
+                <label for="destino">¿A dónde vas?</label>
+                <select id="destino" name="destino" required></select>
+            </div>
+
+            <fieldset class="campo">
+                <legend>Tu perfil de accesibilidad</legend>
+                <label class="opcion">
+                    <input type="radio" name="perfil" value="movilidad" checked>
+                    Movilidad reducida
+                </label>
+                <label class="opcion">
+                    <input type="radio" name="perfil" value="visual">
+                    Visual
+                </label>
+                <label class="opcion">
+                    <input type="radio" name="perfil" value="general">
+                    General
+                </label>
+            </fieldset>
+
+            <button type="submit" class="boton">Buscar ruta</button>
+        </form>
+
+        <p id="mensaje" class="mensaje" role="status"></p>
+    </section>
+</main>
+
+<footer class="pie">IncluCampus · Rutas accesibles para el campus</footer>
+
+<script src="js/accesibilidad.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

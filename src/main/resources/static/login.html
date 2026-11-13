@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IncluCampus - Iniciar sesión</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+    <div class="cabecera__fila">
+        <a class="marca" href="index.html">IncluCampus</a>
+
+        <nav aria-label="Principal">
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="reportar.html">Reportar bloqueo</a></li>
+                <li><a href="bloqueos.html">Bloqueos activos</a></li>
+                <li><a href="login.html" aria-current="page">Iniciar sesión</a></li>
+            </ul>
+        </nav>
+
+        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
+            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+        </div>
+    </div>
+</header>
+
+<main id="contenido">
+    <h1>Iniciar sesión</h1>
+    <p>Elige cómo quieres entrar a IncluCampus.</p>
+
+    <div class="login">
+
+        <section class="tarjeta" aria-labelledby="titulo-usuario">
+            <h2 id="titulo-usuario">Entrar como usuario</h2>
+
+            <form id="form-usuario" novalidate>
+                <div class="campo">
+                    <label for="nombre">Nombre (obligatorio)</label>
+                    <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+                </div>
+
+                <fieldset class="campo" aria-describedby="ayuda-perfil">
+                    <legend>Tu discapacidad (obligatorio)</legend>
+                    <label class="opcion">
+                        <input type="radio" name="perfil" value="movilidad">
+                        Movilidad reducida
+                    </label>
+                    <label class="opcion">
+                        <input type="radio" name="perfil" value="visual">
+                        Visual
+                    </label>
+                    <label class="opcion">
+                        <input type="radio" name="perfil" value="general">
+                        Ninguna o prefiero no indicarla
+                    </label>
+                    <p id="ayuda-perfil" class="ayuda">
+                        La usamos solo para calcular tus rutas. No se guarda al cerrar el navegador.
+                    </p>
+                </fieldset>
+
+                <button type="submit" class="boton">Entrar</button>
+            </form>
+
+            <p id="mensaje-usuario" class="mensaje" role="status"></p>
+        </section>
+
+        <section class="tarjeta" aria-labelledby="titulo-admin">
+            <h2 id="titulo-admin">Entrar como administrador</h2>
+
+            <form id="form-admin" novalidate>
+                <div class="campo">
+                    <label for="admin-usuario">Usuario (obligatorio)</label>
+                    <input type="text" id="admin-usuario" name="usuario" autocomplete="username" required>
+                </div>
+
+                <div class="campo">
+                    <label for="admin-clave">Contraseña (obligatorio)</label>
+                    <input type="password" id="admin-clave" name="clave" autocomplete="current-password" required>
+                </div>
+
+                <button type="submit" class="boton">Entrar</button>
+            </form>
+
+            <p id="mensaje-admin" class="mensaje" role="status"></p>
+        </section>
+
+    </div>
+</main>
+
+<footer class="pie">IncluCampus · Rutas accesibles para el campus</footer>
+
+<script src="js/accesibilidad.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>
