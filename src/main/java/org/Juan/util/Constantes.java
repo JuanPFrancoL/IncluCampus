@@ -11,4 +11,7 @@ public final class Constantes {
     public static final double FACTOR_RAMPA = 1.5;
     public static final double FACTOR_ESCALERA = 3.0;
     public static final double ESPERA_ASCENSOR = 20.0;
+
+    // Para el perfil visual: las escaleras pesan el doble de lo normal
+    public static final double PENALIZACION_ESCALERA_VISUAL = 2.0;
 }
