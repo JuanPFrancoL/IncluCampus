@@ -1,4 +1,14 @@
 package org.Juan.modelo.ubicacion;
 
-public class PuntoServicio {
+/** Un lugar de servicio: Cafetería, Biblioteca, Tienda UAM... */
+public class PuntoServicio extends Ubicacion {
+
+    public PuntoServicio(String id, String nombre) {
+        super(id, nombre);
+    }
+
+    @Override
+    public String getTipo() {
+        return "Punto de servicio";
+    }
 }
