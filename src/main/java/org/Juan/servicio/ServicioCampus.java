@@ -1,5 +1,6 @@
 package org.Juan.servicio;
 
+import org.Juan.modelo.tramo.Tramo;
 import org.Juan.modelo.ubicacion.Ubicacion;
 import org.Juan.repositorio.RepositorioCampus;
 import org.springframework.stereotype.Service;
@@ -25,5 +26,9 @@ public class ServicioCampus {
             }
         }
         return resultado;
+    }
+
+    public List<Tramo> listarTramos() {
+        return repositorio.obtenerTramos();
     }
 }

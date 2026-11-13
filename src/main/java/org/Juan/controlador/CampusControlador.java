@@ -1,5 +1,6 @@
 package org.Juan.controlador;
 
+import org.Juan.modelo.tramo.Tramo;
 import org.Juan.modelo.ubicacion.Ubicacion;
 import org.Juan.servicio.ServicioCampus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,5 +22,10 @@ public class CampusControlador {
     @GetMapping("/lugares")
     public List<Ubicacion> lugares() {
         return servicioCampus.listarLugaresSeleccionables();
+    }
+
+    @GetMapping("/tramos")
+    public List<Tramo> tramos() {
+        return servicioCampus.listarTramos();
     }
 }

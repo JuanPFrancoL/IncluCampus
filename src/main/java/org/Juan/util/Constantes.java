@@ -1,4 +1,14 @@
 package org.Juan.util;
 
-public class Constantes {
+/** Valores fijos del proyecto. Se cambian aquí y afectan a todo. */
+public final class Constantes {
+
+    private Constantes() {
+        // No se crean objetos de esta clase
+    }
+
+    // Cuánto "pesa" cada tipo de camino respecto a caminar en plano
+    public static final double FACTOR_RAMPA = 1.5;
+    public static final double FACTOR_ESCALERA = 3.0;
+    public static final double ESPERA_ASCENSOR = 20.0;
 }
