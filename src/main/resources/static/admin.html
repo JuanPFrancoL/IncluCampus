@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IncluCampus - Iniciar sesión</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+    <div class="cabecera__fila">
+        <a class="marca" href="index.html">IncluCampus</a>
+
+        <nav aria-label="Principal">
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="reportar.html">Reportar bloqueo</a></li>
+                <li><a href="bloqueos.html">Bloqueos activos</a></li>
+                <li><a href="login.html" aria-current="page">Iniciar sesión</a></li>
+            </ul>
+        </nav>
+
+        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
+            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+        </div>
+    </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+    <section class="tarjeta" aria-labelledby="titulo-admin">
+        <h1 id="titulo-admin">Panel de administración</h1>
+
+        <p id="aviso-acceso" class="mensaje mensaje--error" role="alert" hidden>
+            Esta opción es exclusiva para el equipo de mantenimiento.
+            <a href="login.html">Inicia sesión como administrador</a>.
+        </p>
+
+        <div id="panel" hidden>
+            <p>Sesión iniciada como <strong id="nombre-admin"></strong>.</p>
+            <ul>
+                <li><a href="bloqueos.html">Gestionar bloqueos activos</a></li>
+            </ul>
+            <button type="button" id="btn-salir" class="boton">Cerrar sesión</button>
+        </div>
+    </section>
+</main>
+
+<footer class="pie">IncluCampus · Un campus para todos</footer>
+
+<script src="js/accesibilidad.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
