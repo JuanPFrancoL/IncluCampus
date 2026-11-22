@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IncluCampus - Resultado de la ruta</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+    <div class="cabecera__fila">
+        <a class="marca" href="index.html">IncluCampus</a>
+
+        <nav aria-label="Principal">
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="reportar.html">Reportar bloqueo</a></li>
+                <li><a href="bloqueos.html">Bloqueos activos</a></li>
+                <li><a href="login.html">Iniciar sesión</a></li>
+            </ul>
+        </nav>
+
+        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
+            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+        </div>
+    </div>
+</header>
+<main id="contenido" tabindex="-1">
+    <section class="tarjeta" aria-labelledby="titulo-reporte">
+        <h1 id="titulo-reporte">Reportar bloqueo</h1>
+
+        <form id="form-bloqueo" novalidate>
+            <div class="campo">
+                <label for="camino">Camino bloqueado (obligatorio)</label>
+                <select id="camino" name="camino" required aria-describedby="mensaje"></select>
+            </div>
+
+            <div class="campo">
+                <label for="motivo">Motivo (obligatorio)</label>
+                <select id="motivo" name="motivo" required aria-describedby="mensaje">
+                    <option value="">Elige un motivo</option>
+                    <option value="OBRAS">Obras</option>
+                    <option value="EVENTO">Evento en el campus</option>
+                    <option value="ASCENSOR">Ascensor fuera de servicio</option>
+                    <option value="OTRO">Otro</option>
+                </select>
+            </div>
+
+            <div class="campo">
+                <label for="detalle">Detalle (opcional)</label>
+                <textarea id="detalle" name="detalle" rows="4" maxlength="250"></textarea>
+            </div>
+
+            <button type="submit" class="boton">Reportar bloqueo</button>
+        </form>
+
+        <p id="mensaje" class="mensaje" role="status"></p>
+    </section>
+</main>
+<script src="js/accesibilidad.js"></script>
+<script src="js/rutas.js"></script>
+</body>
+</html>
