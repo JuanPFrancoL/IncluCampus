@@ -74,7 +74,6 @@ formulario.addEventListener("submit", function (evento) {
     return;
   }
 
-  // Más adelante aquí se pedirá la ruta al servidor y se abrirá rutas.html.
-  mostrarMensaje("Buscando ruta de " + nombreElegido(selectOrigen) + " a " +
-    nombreElegido(selectDestino) + " (perfil: " + perfil + ")...", false);
-});
+  // Buscando ruta
+    const parametros = new URLSearchParams({ origen: origen, destino: destino, perfil: perfil });
+    window.location.href = "rutas.html?" + parametros.toString();
