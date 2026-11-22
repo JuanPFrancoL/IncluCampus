@@ -23,19 +23,16 @@ function nombreElegido(select) {
 }
 
 // Pide los lugares al servidor
-async function cargarLugares() {
-  try {
-    const respuesta = await fetch("/api/lugares");
-    if (!respuesta.ok) {
-      throw new Error("Respuesta " + respuesta.status);
-    }
-    const lugares = await respuesta.json();
-    llenarSelect(selectOrigen, lugares);
-    llenarSelect(selectDestino, lugares);
-  } catch (error) {
-    mostrarMensaje("Error: no se pudieron cargar los lugares. Revisa que el servidor esté encendido.", true);
-  }
+function cargarLugares() {
+  [selectOrigen, selectDestino].forEach(function (select) {
+    select.length = 0;
+    select.add(new Option("Elige un lugar", ""));
+    Object.keys(LUGARES).forEach(function (id) {
+      select.add(new Option(LUGARES[id], id));
+    });
+  });
 }
+cargarLugares();
 
 // Los desplegables empiezan solo con "Elige un lugar" hasta que llegue la lista
 llenarSelect(selectOrigen, []);
