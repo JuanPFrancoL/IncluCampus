@@ -77,3 +77,4 @@ formulario.addEventListener("submit", function (evento) {
   // Buscando ruta
     const parametros = new URLSearchParams({ origen: origen, destino: destino, perfil: perfil });
     window.location.href = "rutas.html?" + parametros.toString();
+});
