@@ -32,7 +32,7 @@ async function cargarCaminos() {
 
 cargarCaminos();
 
-formulario.addEventListener("submit", function (evento) {
+formulario.addEventListener("submit", async function (evento) {
   evento.preventDefault();
   marcarInvalido(selectCamino, false);
   marcarInvalido(selectMotivo, false);
@@ -50,6 +50,25 @@ formulario.addEventListener("submit", function (evento) {
     return;
   }
 
-  // Más adelante aquí se enviará el reporte al servidor (POST /api/bloqueos).
-  mostrarMensaje("El envío del reporte se activará cuando el servidor esté listo.", false);
-});
+  try {
+    const resp = await fetch("/api/bloqueos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tramoId: selectCamino.value,
+        motivo: selectMotivo.value
+      })
+    });
+
+    const datos = await resp.json();
+    if (!resp.ok) {
+      mostrarMensaje("Error: " + (datos.mensaje || "No se pudo registrar el bloqueo."), true);
+      return;
+    }
+
+    mostrarMensaje("Bloqueo reportado correctamente. Las rutas se recalcularán evitando este tramo.", false);
+    formulario.reset();
+  } catch (error) {
+    mostrarMensaje("Error de conexión con el servidor.", true);
+  }
+}););

@@ -1,0 +1,94 @@
+const listaBloqueos = document.getElementById("lista-bloqueos");
+const mensajeBloqueos = document.getElementById("mensaje-bloqueos");
+
+function esAdministrador() {
+  return sessionStorage.getItem("rol") === "ADMIN";
+}
+
+function mostrarMensaje(texto, esError) {
+  mensajeBloqueos.textContent = texto;
+  mensajeBloqueos.classList.toggle("mensaje--error", esError);
+}
+
+async function resolverBloqueo(id) {
+  try {
+    const resp = await fetch("/api/admin/bloqueos/" + id + "/resolver", {
+      method: "PATCH",
+      headers: {
+        "X-Rol": sessionStorage.getItem("rol") || ""
+      }
+    });
+
+    const datos = await resp.json();
+    if (!resp.ok) {
+      mostrarMensaje("Error: " + (datos.mensaje || "No se pudo resolver el bloqueo."), true);
+      return;
+    }
+
+    mostrarMensaje(datos.mensaje || "Bloqueo resuelto.", false);
+    cargarBloqueos();
+  } catch (error) {
+    mostrarMensaje("Error de conexión con el servidor.", true);
+  }
+}
+
+async function cargarBloqueos() {
+  listaBloqueos.innerHTML = "";
+  try {
+    const [respBloqueos, respTramos] = await Promise.all([
+      fetch("/api/bloqueos"),
+      fetch("/api/tramos")
+    ]);
+
+    if (!respBloqueos.ok) {
+      throw new Error("No se pudieron consultar los bloqueos.");
+    }
+
+    const bloqueos = await respBloqueos.json();
+    const tramos = respTramos.ok ? await respTramos.json() : [];
+
+    const nombresTramos = {};
+    tramos.forEach(function (t) {
+      nombresTramos[t.id] = t.descripcion;
+    });
+
+    if (bloqueos.length === 0) {
+      mostrarMensaje("No hay bloqueos activos en este momento. Todos los caminos están habilitados.", false);
+      return;
+    }
+
+    mostrarMensaje("Se encontraron " + bloqueos.length + " bloqueo(s) activo(s):", false);
+
+    const ul = document.createElement("ul");
+    bloqueos.forEach(function (b) {
+      const li = document.createElement("li");
+      li.style.marginBottom = "1rem";
+
+      const nombreCamino = nombresTramos[b.tramoId] || b.tramoId;
+      const info = document.createElement("p");
+      info.innerHTML = "<strong>Camino:</strong> " + nombreCamino +
+        "<br><strong>Motivo:</strong> " + b.motivo +
+        (b.descripcion ? "<br><strong>Detalle:</strong> " + b.descripcion : "");
+      li.appendChild(info);
+
+      if (esAdministrador()) {
+        const btnResolver = document.createElement("button");
+        btnResolver.type = "button";
+        btnResolver.className = "boton";
+        btnResolver.textContent = "Resolver y habilitar camino";
+        btnResolver.addEventListener("click", function () {
+          resolverBloqueo(b.id);
+        });
+        li.appendChild(btnResolver);
+      }
+
+      ul.appendChild(li);
+    });
+
+    listaBloqueos.appendChild(ul);
+  } catch (error) {
+    mostrarMensaje("Error: no se pudieron cargar los bloqueos. Revisa que el servidor esté encendido.", true);
+  }
+}
+
+cargarBloqueos();

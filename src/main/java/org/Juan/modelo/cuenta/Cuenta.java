@@ -1,4 +1,19 @@
 package org.Juan.modelo.cuenta;
 
-public class Cuenta {
+import java.io.Serializable;
+
+public abstract class Cuenta implements Serializable {
+
+    private final String nombre;
+
+    protected Cuenta(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    /** Cada tipo de cuenta dice qué rol tiene. */
+    public abstract Rol getRol();
 }

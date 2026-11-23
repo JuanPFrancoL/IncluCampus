@@ -1,10 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IncluCampus - Bloqueos activos</title>
+    <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
+<a class="salto" href="#contenido">Saltar al contenido</a>
 
+<header class="cabecera">
+    <div class="cabecera__fila">
+        <a class="marca" href="index.html">IncluCampus</a>
+
+        <nav aria-label="Principal">
+            <ul class="menu">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="reportar.html">Reportar bloqueo</a></li>
+                <li><a href="bloqueos.html" aria-current="page">Bloqueos activos</a></li>
+                <li><a href="login.html">Iniciar sesión</a></li>
+            </ul>
+        </nav>
+
+        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
+            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+        </div>
+    </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+    <section class="tarjeta" aria-labelledby="titulo-bloqueos">
+        <h1 id="titulo-bloqueos">Bloqueos activos en el campus</h1>
+        <p id="mensaje-bloqueos" class="mensaje" role="status">Cargando bloqueos...</p>
+        <div id="lista-bloqueos"></div>
+    </section>
+</main>
+
+<footer class="pie">IncluCampus · Un campus para todos</footer>
+
+<script src="js/accesibilidad.js"></script>
+<script src="js/bloqueos.js"></script>
 </body>
 </html>

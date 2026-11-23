@@ -10,6 +10,7 @@ import org.Juan.modelo.perfil.PerfilMovilidadReducida;
 import org.Juan.modelo.perfil.PerfilVisual;
 import org.Juan.modelo.tramo.Tramo;
 import org.Juan.modelo.ubicacion.Ubicacion;
+import org.Juan.repositorio.RepositorioBloqueos;
 import org.Juan.repositorio.RepositorioCampus;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +21,13 @@ import java.util.List;
 public class ServicioRutas {
 
     private final RepositorioCampus repositorio;
+    private final RepositorioBloqueos repositorioBloqueos;
     private final EstrategiaRuta rutaMasCorta = new RutaMasCorta();
     private final EstrategiaRuta rutaMasAccesible = new RutaMasAccesible();
 
-    public ServicioRutas(RepositorioCampus repositorio) {
+    public ServicioRutas(RepositorioCampus repositorio, RepositorioBloqueos repositorioBloqueos) {
         this.repositorio = repositorio;
+        this.repositorioBloqueos = repositorioBloqueos;
     }
 
     public Ruta buscarRuta(String idOrigen, String idDestino, String codigoPerfil) {
@@ -36,11 +39,9 @@ public class ServicioRutas {
         Ubicacion destino = repositorio.buscarPorId(idDestino);
         PerfilAccesibilidad perfil = crearPerfil(codigoPerfil);
 
-        // Solo pasan los tramos que este perfil puede usar.
-        // (Más adelante aquí también se descartan los tramos bloqueados.)
         List<Tramo> disponibles = new ArrayList<>();
         for (Tramo tramo : repositorio.obtenerTramos()) {
-            if (perfil.puedeUsar(tramo)) {
+            if (perfil.puedeUsar(tramo) && !repositorioBloqueos.estaTramoBloqueado(tramo.getId())) {
                 disponibles.add(tramo);
             }
         }

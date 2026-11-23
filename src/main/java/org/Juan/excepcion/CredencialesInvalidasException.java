@@ -1,4 +1,7 @@
 package org.Juan.excepcion;
 
-public class CredencialesInvalidasException {
+public class CredencialesInvalidasException extends RuntimeException {
+    public CredencialesInvalidasException(String mensaje) {
+        super(mensaje);
+    }
 }

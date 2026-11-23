@@ -14,7 +14,7 @@ formUsuario.addEventListener("submit", function (evento) {
 
   const campoNombre = document.getElementById("nombre");
   const nombre = campoNombre.value.trim();
-  const perfil = formUsuario.elements["perfil"].value; // "" si no eligió ninguno
+  const perfil = formUsuario.elements["perfil"].value;
 
   if (nombre === "") {
     mostrarMensaje(mensajeUsuario, "Error: escribe tu nombre.", true);
@@ -27,19 +27,17 @@ formUsuario.addEventListener("submit", function (evento) {
     return;
   }
 
-  // sessionStorage se borra al cerrar la pestaña.
-  // Más adelante esto lo hará el servidor (Java) con la sesión.
   try {
     sessionStorage.setItem("rol", "USUARIO");
     sessionStorage.setItem("nombre", nombre);
     sessionStorage.setItem("perfil", perfil);
-  } catch (e) { /* si no se puede guardar, igual seguimos */ }
+  } catch (e) { }
 
   window.location.href = "index.html";
 });
 
 // ----- Administrador: usuario + contraseña -----
-formAdmin.addEventListener("submit", function (evento) {
+formAdmin.addEventListener("submit", async function (evento) {
   evento.preventDefault();
 
   const campoUsuario = document.getElementById("admin-usuario");
@@ -56,7 +54,26 @@ formAdmin.addEventListener("submit", function (evento) {
     return;
   }
 
-  // La contraseña se valida en Java (ServicioAutenticacion), nunca aquí.
-  mostrarMensaje(mensajeAdmin,
-    "El acceso de administrador se activará cuando el servidor esté listo.", false);
+  try {
+    const resp = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        usuario: campoUsuario.value.trim(),
+        clave: campoClave.value
+      })
+    });
+
+    const datos = await resp.json();
+    if (!resp.ok) {
+      mostrarMensaje(mensajeAdmin, "Error: " + (datos.mensaje || "Credenciales inválidas."), true);
+      return;
+    }
+
+    sessionStorage.setItem("rol", datos.rol);
+    sessionStorage.setItem("nombre", datos.nombre);
+    window.location.href = "admin.html";
+  } catch (error) {
+    mostrarMensaje(mensajeAdmin, "Error de conexión con el servidor.", true);
+  }
 });
