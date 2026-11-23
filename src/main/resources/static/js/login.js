@@ -8,6 +8,11 @@ function mostrarMensaje(elemento, texto, esError) {
   elemento.classList.toggle("mensaje--error", esError);
 }
 
+function marcarInvalido(campo, invalido) {
+  if (invalido) campo.setAttribute("aria-invalid", "true");
+  else campo.removeAttribute("aria-invalid");
+}
+
 // ----- Usuario: nombre + discapacidad -----
 formUsuario.addEventListener("submit", function (evento) {
   evento.preventDefault();
@@ -16,7 +21,10 @@ formUsuario.addEventListener("submit", function (evento) {
   const nombre = campoNombre.value.trim();
   const perfil = formUsuario.elements["perfil"].value;
 
+  marcarInvalido(campoNombre, false);
+
   if (nombre === "") {
+    marcarInvalido(campoNombre, true);
     mostrarMensaje(mensajeUsuario, "Error: escribe tu nombre.", true);
     campoNombre.focus();
     return;
@@ -43,12 +51,17 @@ formAdmin.addEventListener("submit", async function (evento) {
   const campoUsuario = document.getElementById("admin-usuario");
   const campoClave = document.getElementById("admin-clave");
 
+  marcarInvalido(campoUsuario, false);
+  marcarInvalido(campoClave, false);
+
   if (campoUsuario.value.trim() === "") {
+    marcarInvalido(campoUsuario, true);
     mostrarMensaje(mensajeAdmin, "Error: escribe tu usuario.", true);
     campoUsuario.focus();
     return;
   }
   if (campoClave.value === "") {
+    marcarInvalido(campoClave, true);
     mostrarMensaje(mensajeAdmin, "Error: escribe tu contraseña.", true);
     campoClave.focus();
     return;
@@ -64,9 +77,19 @@ formAdmin.addEventListener("submit", async function (evento) {
       })
     });
 
-    const datos = await resp.json();
+    const datos = await resp.json().catch(function () { return {}; });
+
     if (!resp.ok) {
-      mostrarMensaje(mensajeAdmin, "Error: " + (datos.mensaje || "Credenciales inválidas."), true);
+      const credencialesMalas = resp.status === 400 || resp.status === 401;
+      const texto = credencialesMalas
+        ? (datos.mensaje || "Usuario o contraseña incorrectos.")
+        : "El servidor no pudo procesar el inicio de sesión.";
+      if (credencialesMalas) {
+        marcarInvalido(campoUsuario, true);
+        marcarInvalido(campoClave, true);
+        campoClave.focus();
+      }
+      mostrarMensaje(mensajeAdmin, "Error: " + texto, true);
       return;
     }
 

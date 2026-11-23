@@ -29,7 +29,7 @@
     </div>
 </header>
 
-<main id="contenido">
+<main id="contenido" tabindex="-1">
     <h1>Iniciar sesión</h1>
     <p>Elige cómo quieres entrar a IncluCampus.</p>
 
@@ -41,10 +41,10 @@
             <form id="form-usuario" novalidate>
                 <div class="campo">
                     <label for="nombre">Nombre (obligatorio)</label>
-                    <input type="text" id="nombre" name="nombre" autocomplete="name" required>
+                    <input type="text" id="nombre" name="nombre" autocomplete="name" required aria-describedby="mensaje-usuario">
                 </div>
 
-                <fieldset class="campo" aria-describedby="ayuda-perfil">
+                <fieldset class="campo" aria-describedby="ayuda-perfil mensaje-usuario">
                     <legend>Tu discapacidad (obligatorio)</legend>
                     <label class="opcion">
                         <input type="radio" name="perfil" value="movilidad">
@@ -63,7 +63,7 @@
                     </p>
                 </fieldset>
 
-                <button type="submit" class="boton">Entrar</button>
+                <button type="submit" class="boton" aria-label="Entrar como usuario">Entrar</button>
             </form>
 
             <p id="mensaje-usuario" class="mensaje" role="status"></p>
@@ -75,15 +75,15 @@
             <form id="form-admin" novalidate>
                 <div class="campo">
                     <label for="admin-usuario">Usuario (obligatorio)</label>
-                    <input type="text" id="admin-usuario" name="usuario" autocomplete="username" required>
+                    <input type="text" id="admin-usuario" name="usuario" autocomplete="username" required aria-describedby="mensaje-admin">
                 </div>
 
                 <div class="campo">
                     <label for="admin-clave">Contraseña (obligatorio)</label>
-                    <input type="password" id="admin-clave" name="clave" autocomplete="current-password" required>
+                    <input type="password" id="admin-clave" name="clave" autocomplete="current-password" required aria-describedby="mensaje-admin">
                 </div>
 
-                <button type="submit" class="boton">Entrar</button>
+                <button type="submit" class="boton" aria-label="Entrar como administrador">Entrar</button>
             </form>
 
             <p id="mensaje-admin" class="mensaje" role="status"></p>
