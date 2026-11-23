@@ -12,7 +12,7 @@ function mostrarMensaje(texto, esError) {
 
 async function resolverBloqueo(id) {
   try {
-    const resp = await fetch("/api/admin/bloqueos/" + id + "/resolver", {
+    const resp = await fetch("/api/bloqueos/" + id + "/levantar", {
       method: "PATCH",
       headers: {
         "X-Rol": sessionStorage.getItem("rol") || ""
@@ -44,7 +44,10 @@ async function cargarBloqueos() {
       throw new Error("No se pudieron consultar los bloqueos.");
     }
 
-    const bloqueos = await respBloqueos.json();
+    const todosLosBloqueos = await respBloqueos.json();
+    const bloqueos = todosLosBloqueos.filter(function (b) {
+      return b.estado === "ACTIVO";
+    });
     const tramos = respTramos.ok ? await respTramos.json() : [];
 
     const nombresTramos = {};
@@ -64,11 +67,12 @@ async function cargarBloqueos() {
       const li = document.createElement("li");
       li.style.marginBottom = "1rem";
 
-      const nombreCamino = nombresTramos[b.tramoId] || b.tramoId;
+      const nombreCamino = nombresTramos[b.tramoId] || b.camino || b.tramoId;
+      const detalle = b.detalle || b.descripcion;
       const info = document.createElement("p");
       info.innerHTML = "<strong>Camino:</strong> " + nombreCamino +
         "<br><strong>Motivo:</strong> " + b.motivo +
-        (b.descripcion ? "<br><strong>Detalle:</strong> " + b.descripcion : "");
+        (detalle ? "<br><strong>Detalle:</strong> " + detalle : "");
       li.appendChild(info);
 
       if (esAdministrador()) {
