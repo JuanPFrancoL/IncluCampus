@@ -13,9 +13,10 @@ function mostrarError(texto) {
   mensaje.classList.add("mensaje--error");
 }
 
-function buscarRuta(a, b, perfilElegido) {
-  const base = [a, b].sort().join("|");
-  return RUTAS[base + "|" + perfilElegido] || RUTAS[base] || null;
+// El plano sirve en los dos sentidos: Biblioteca→Bloque F y Bloque F→Biblioteca
+function buscarRuta(a, b) {
+  const clave = [a, b].sort().join("|");
+  return RUTAS[clave] || null;
 }
 
 function mostrarRuta() {
@@ -23,20 +24,21 @@ function mostrarRuta() {
     mostrarError("faltan el origen o el destino. Vuelve a buscar.");
     return;
   }
-  const ruta = buscarRuta(origen, destino, perfil);
-  if (!ruta) {
-    mostrarError("todavía no tenemos la ruta entre " + LUGARES[origen] + " y " + LUGARES[destino] + ".");
+  const archivo = buscarRuta(origen, destino);
+  if (!archivo) {
+    mostrarError("todavía no tenemos el plano entre " + LUGARES[origen] + " y " + LUGARES[destino] + ".");
     return;
   }
-  document.getElementById("recorrido").textContent = LUGARES[origen] + " → " + LUGARES[destino];
+  const recorrido = LUGARES[origen] + " → " + LUGARES[destino];
+  document.getElementById("recorrido").textContent = recorrido;
   document.getElementById("perfil").textContent = NOMBRES_PERFIL[perfil] || perfil;
-  document.getElementById("descripcion").textContent = ruta.descripcion;
-  document.getElementById("distancia").textContent = ruta.distancia;
-  imagen.alt = ruta.alt;
+  document.getElementById("descripcion").textContent =
+    "Sigue la línea marcada en el plano para ir de " + LUGARES[origen] + " a " + LUGARES[destino] + ".";
+  imagen.alt = "Plano del campus con la ruta de " + LUGARES[origen] + " a " + LUGARES[destino];
   imagen.addEventListener("error", function () {
     mostrarError("no se pudo cargar la imagen de la ruta.");
   });
-  imagen.src = ruta.imagen;
+  imagen.src = "img/rutas/" + archivo;
   resumen.hidden = false;
   mensaje.textContent = "Ruta encontrada.";
 }
