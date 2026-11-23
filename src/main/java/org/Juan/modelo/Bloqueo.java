@@ -21,8 +21,10 @@ public class Bloqueo {
 
     public String getId() { return id; }
     public String getTramoId() { return tramoId; }
+    public String getCamino() { return tramoId; }
     public String getMotivo() { return motivo; }
     public String getDescripcion() { return descripcion; }
+    public String getDetalle() { return descripcion; }
     public String getEstado() { return estado; }
     public LocalDateTime getFecha() { return fecha; }
     public void resolver() { this.estado = "RESUELTO"; }

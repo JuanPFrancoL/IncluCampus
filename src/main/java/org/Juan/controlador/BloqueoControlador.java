@@ -1,4 +1,3 @@
-// BloqueoControlador.java
 package org.Juan.controlador;
 
 import org.Juan.modelo.Bloqueo;
@@ -19,17 +18,16 @@ public class BloqueoControlador {
     }
 
     @GetMapping
-    public List<Bloqueo> listarActivos() {
-        return servicioBloqueos.listarActivos();
+    public List<Bloqueo> listarTodos() {
+        return servicioBloqueos.listarTodos();
     }
 
     @PostMapping
     public Bloqueo crear(@RequestBody Map<String, String> datos) {
-        return servicioBloqueos.reportar(
-                datos.get("tramoId"),
-                datos.get("motivo"),
-                datos.getOrDefault("descripcion", "")
-        );
+        String camino = datos.getOrDefault("camino", datos.get("tramoId"));
+        String motivo = datos.get("motivo");
+        String detalle = datos.getOrDefault("detalle", datos.getOrDefault("descripcion", ""));
+        return servicioBloqueos.reportar(camino, motivo, detalle);
     }
 
     @PatchMapping("/{id}/levantar")
