@@ -17,4 +17,9 @@ public class Usuario extends Cuenta {
     public Rol getRol() {
         return Rol.USUARIO;
     }
+
+    @Override
+    public boolean puedeAdministrar() {
+        return false;
+    }
 }

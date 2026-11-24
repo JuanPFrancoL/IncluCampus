@@ -1,10 +1,6 @@
 const listaBloqueos = document.getElementById("lista-bloqueos");
 const mensajeBloqueos = document.getElementById("mensaje-bloqueos");
 
-function esAdministrador() {
-  return sessionStorage.getItem("rol") === "ADMIN";
-}
-
 function mostrarMensaje(texto, esError) {
   mensajeBloqueos.textContent = texto;
   mensajeBloqueos.classList.toggle("mensaje--error", esError);
@@ -12,14 +8,11 @@ function mostrarMensaje(texto, esError) {
 
 async function resolverBloqueo(id) {
   try {
-    const resp = await fetch("/api/bloqueos/" + id + "/levantar", {
-      method: "PATCH",
-      headers: {
-        "X-Rol": sessionStorage.getItem("rol") || ""
-      }
+    const resp = await fetch("/api/bloqueos/" + encodeURIComponent(id) + "/levantar", {
+      method: "PATCH"
     });
 
-    const datos = await resp.json();
+    const datos = await resp.json().catch(function () { return {}; });
     if (!resp.ok) {
       mostrarMensaje("Error: " + (datos.mensaje || "No se pudo resolver el bloqueo."), true);
       return;
@@ -32,12 +25,22 @@ async function resolverBloqueo(id) {
   }
 }
 
+// Agrega una línea "Etiqueta: valor" usando textContent (nada de innerHTML)
+function agregarLinea(padre, etiqueta, valor) {
+  const negrita = document.createElement("strong");
+  negrita.textContent = etiqueta + ": ";
+  padre.appendChild(negrita);
+  padre.appendChild(document.createTextNode(valor));
+  padre.appendChild(document.createElement("br"));
+}
+
 async function cargarBloqueos() {
-  listaBloqueos.innerHTML = "";
+  listaBloqueos.replaceChildren();
   try {
-    const [respBloqueos, respTramos] = await Promise.all([
+    const [respBloqueos, respTramos, admin] = await Promise.all([
       fetch("/api/bloqueos"),
-      fetch("/api/tramos")
+      fetch("/api/tramos"),
+      esAdministrador()
     ]);
 
     if (!respBloqueos.ok) {
@@ -70,12 +73,16 @@ async function cargarBloqueos() {
       const nombreCamino = nombresTramos[b.tramoId] || b.camino || b.tramoId;
       const detalle = b.detalle || b.descripcion;
       const info = document.createElement("p");
-      info.innerHTML = "<strong>Camino:</strong> " + nombreCamino +
-        "<br><strong>Motivo:</strong> " + b.motivo +
-        (detalle ? "<br><strong>Detalle:</strong> " + detalle : "");
+      agregarLinea(info, "Camino", nombreCamino);
+      agregarLinea(info, "Motivo", b.motivo);
+      if (detalle) {
+        agregarLinea(info, "Detalle", detalle);
+      }
       li.appendChild(info);
 
-      if (esAdministrador()) {
+      // El botón solo se muestra al administrador. Aunque alguien lo fuerce desde la consola,
+      // el servidor responde 403 si no hay sesión de administrador.
+      if (admin) {
         const btnResolver = document.createElement("button");
         btnResolver.type = "button";
         btnResolver.className = "boton";

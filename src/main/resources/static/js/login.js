@@ -14,7 +14,7 @@ function marcarInvalido(campo, invalido) {
 }
 
 // ----- Usuario: nombre + discapacidad -----
-formUsuario.addEventListener("submit", function (evento) {
+formUsuario.addEventListener("submit", async function (evento) {
   evento.preventDefault();
 
   const campoNombre = document.getElementById("nombre");
@@ -35,6 +35,12 @@ formUsuario.addEventListener("submit", function (evento) {
     return;
   }
 
+  // Si antes había un administrador conectado en este navegador, se cierra su sesión
+  try {
+    await fetch("/api/auth/logout", { method: "POST" });
+  } catch (e) { /* si falla, igual seguimos */ }
+
+  // El nombre y el perfil solo sirven para mostrar y preseleccionar. No dan ningún permiso.
   try {
     sessionStorage.setItem("rol", "USUARIO");
     sessionStorage.setItem("nombre", nombre);
@@ -44,7 +50,7 @@ formUsuario.addEventListener("submit", function (evento) {
   window.location.href = "index.html";
 });
 
-// ----- Administrador: usuario + contraseña -----
+// ----- Administrador: usuario + contraseña (se validan en Java) -----
 formAdmin.addEventListener("submit", async function (evento) {
   evento.preventDefault();
 
@@ -93,8 +99,10 @@ formAdmin.addEventListener("submit", async function (evento) {
       return;
     }
 
-    sessionStorage.setItem("rol", datos.rol);
-    sessionStorage.setItem("nombre", datos.nombre);
+    // El permiso de administrador queda en la sesión del servidor (cookie), no en el navegador.
+    try {
+      sessionStorage.setItem("nombre", datos.nombre);
+    } catch (e) { }
     window.location.href = "admin.html";
   } catch (error) {
     mostrarMensaje(mensajeAdmin, "Error de conexión con el servidor.", true);
