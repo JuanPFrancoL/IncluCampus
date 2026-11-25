@@ -20,9 +20,19 @@ const LUGARES = {
   tren: "Tren"
 };
 
-// Cada recorrido tiene un plano en img/rutas/.
+// Puntos del campus donde se puede reportar un bloqueo (id -> nombre que ve la persona).
+const PUNTOS_BLOQUEABLES = {
+  cafeteria4: "Camino de Cafetería 4",
+  crucesacatin: "Cruce Sacatín"
+};
+
+// Nombre legible de un punto bloqueado (si el id no se conoce, se muestra tal cual)
+function nombrePunto(id) {
+  return PUNTOS_BLOQUEABLES[id] || id;
+}
+
+// Cada recorrido normal tiene un plano en img/rutas/.
 // La clave son los dos lugares en orden alfabético separados por "|".
-// Para agregar uno: sube el plano y agrega una línea aquí.
 const RUTAS = {
   "banobiblioteca|bloque16": "banobiblioteca-bloque16.png",
   "banobiblioteca|bloquefisioterapia": "banobiblioteca-bloquefisioterapia.png",
@@ -154,4 +164,116 @@ const RUTAS = {
   "salud|tiendauam": "tiendauam-salud.png",
   "salud|tren": "tren-salud.png",
   "tiendauam|tren": "tren-tiendauam.png"
+};
+
+// Planos de rutas alternas, según qué puntos estén bloqueados:
+// "cafeteria4", "crucesacatin" o "ambos". Están en img/alternas/<variante>/.
+// Si un recorrido no aparece aquí, ese bloqueo no lo afecta y sirve el plano normal.
+const ALTERNAS = {
+  cafeteria4: {
+    "banobiblioteca|capilla": "capilla-banobiblioteca.png",
+    "banobiblioteca|estacionamiento": "estacionamiento-banobiblioteca.png",
+    "banobiblioteca|estacionamientocarros": "estacionamientocarros-banobiblioteca.png",
+    "banobiblioteca|tren": "tren-banobiblioteca.png",
+    "biblioteca|capilla": "capilla-biblioteca.png",
+    "biblioteca|estacionamiento": "estacionamiento-biblioteca.png",
+    "biblioteca|estacionamientocarros": "estacionamientocarros-biblioteca.png",
+    "biblioteca|tren": "tren-biblioteca.png",
+    "bloque16|capilla": "capilla-bloque16.png",
+    "bloque16|estacionamiento": "estacionamiento-bloque16.png",
+    "bloque16|estacionamientocarros": "estacionamientocarros-bloque16.png",
+    "bloque16|tren": "tren-bloque16.png",
+    "bloquefisioterapia|capilla": "capilla-bloquefisioterapia.png",
+    "bloquefisioterapia|estacionamiento": "estacionamiento-bloquefisioterapia.png",
+    "bloquefisioterapia|estacionamientocarros": "estacionamientocarros-bloquefisioterapia.png",
+    "bloquefisioterapia|tren": "tren-bloquefisioterapia.png",
+    "bloquef|capilla": "capilla-bloquef.png",
+    "bloquef|estacionamiento": "estacionamiento-bloquef.png",
+    "bloquef|estacionamientocarros": "estacionamientocarros-bloquef.png",
+    "bloquef|tren": "tren-bloquef.png",
+    "cafeteria1|capilla": "capilla-cafeteria1.png",
+    "cafeteria1|estacionamiento": "estacionamiento-cafeteria1.png",
+    "cafeteria1|estacionamientocarros": "estacionamientocarros-cafeteria1.png",
+    "cafeteria2|capilla": "capilla-cafeteria2.png",
+    "cafeteria2|estacionamiento": "estacionamiento-cafeteria2.png",
+    "cafeteria2|estacionamientocarros": "estacionamientocarros-cafeteria2.png",
+    "cafeteria2|tren": "tren-cafeteria2.png",
+    "cafeteria3|capilla": "capilla-cafeteria3.png",
+    "cafeteria3|estacionamiento": "estacionamiento-cafeteria3.png",
+    "cafeteria3|estacionamientocarros": "estacionamientocarros-cafeteria3.png",
+    "cafeteria3|tren": "tren-cafeteria3.png",
+    "cafeteria4|capilla": "capilla-cafeteria4.png",
+    "cafeteria4|estacionamiento": "estacionamiento-cafeteria4.png",
+    "cafeteria4|estacionamientocarros": "estacionamientocarros-cafeteria4.png",
+    "cafeteria4|tren": "tren-cafeteria4.png",
+    "capilla|estacionamientou": "capilla-estacionamientou.png",
+    "capilla|parqueestudiantes": "capilla-parqueestudiantes.png",
+    "capilla|salud": "capilla-salud.png",
+    "capilla|tiendauam": "capilla-tiendauam.png",
+    "estacionamientocarros|estacionamientou": "estacionamientocarros-estacionamientou.png",
+    "estacionamientocarros|parqueestudiantes": "estacionamientocarros-parqueestudiantes.png",
+    "estacionamientocarros|salud": "estacionamientocarros-salud.png",
+    "estacionamientocarros|tiendauam": "estacionamientocarros-tiendauam.png",
+    "estacionamientou|tren": "tren-estacionamientou.png",
+    "estacionamiento|estacionamientou": "estacionamiento-estacionamientou.png",
+    "estacionamiento|parqueestudiantes": "estacionamiento-parqueestudiantes.png",
+    "estacionamiento|salud": "estacionamiento-salud.png",
+    "estacionamiento|tiendauam": "estacionamiento-tiendauam.png",
+    "parqueestudiantes|tren": "tren-parqueestudiantes.png",
+    "salud|tren": "tren-salud.png",
+    "tiendauam|tren": "tren-tiendauam.png"
+  },
+  crucesacatin: {
+    "banobiblioteca|bloque16": "banobiblioteca-bloque16.png",
+    "banobiblioteca|cafeteria1": "banobiblioteca-cafeteria1.png",
+    "banobiblioteca|salud": "banobiblioteca-salud.png",
+    "biblioteca|bloque16": "biblioteca-bloque16.png",
+    "biblioteca|cafeteria1": "biblioteca-cafeteria1.png",
+    "biblioteca|salud": "biblioteca-salud.png",
+    "bloque16|bloquef": "bloquef-bloque16.png",
+    "bloque16|bloquefisioterapia": "bloquefisioterapia-bloque16.png",
+    "bloque16|cafeteria1": "cafeteria1-bloque16.png",
+    "bloque16|cafeteria2": "cafeteria2-bloque16.png",
+    "bloque16|cafeteria3": "cafeteria3-bloque16.png",
+    "bloque16|capilla": "capilla-bloque16.png",
+    "bloque16|estacionamiento": "estacionamiento-bloque16.png",
+    "bloque16|estacionamientocarros": "estacionamientocarros-bloque16.png",
+    "bloque16|parqueestudiantes": "parqueestudiantes-bloque16.png",
+    "bloque16|tiendauam": "tiendauam-bloque16.png",
+    "bloque16|tren": "tren-bloque16.png",
+    "bloquefisioterapia|cafeteria1": "bloquefisioterapia-cafeteria1.png",
+    "bloquefisioterapia|salud": "bloquefisioterapia-salud.png",
+    "bloquef|cafeteria1": "bloquef-cafeteria1.png",
+    "bloquef|salud": "bloquef-salud.png",
+    "cafeteria1|cafeteria2": "cafeteria2-cafeteria1.png",
+    "cafeteria1|cafeteria3": "cafeteria3-cafeteria1.png",
+    "cafeteria1|capilla": "capilla-cafeteria1.png",
+    "cafeteria1|estacionamiento": "estacionamiento-cafeteria1.png",
+    "cafeteria1|estacionamientocarros": "estacionamientocarros-cafeteria1.png",
+    "cafeteria1|parqueestudiantes": "parqueestudiantes-cafeteria1.png",
+    "cafeteria1|tiendauam": "tiendauam-cafeteria1.png",
+    "cafeteria1|tren": "tren-cafeteria1.png",
+    "cafeteria2|salud": "cafeteria2-salud.png",
+    "cafeteria3|salud": "cafeteria3-salud.png",
+    "capilla|salud": "capilla-salud.png",
+    "estacionamientocarros|salud": "estacionamientocarros-salud.png",
+    "estacionamiento|salud": "estacionamiento-salud.png",
+    "parqueestudiantes|salud": "parqueestudiantes-salud.png",
+    "salud|tiendauam": "tiendauam-salud.png",
+    "salud|tren": "tren-salud.png"
+  },
+  ambos: {
+    "bloque16|capilla": "capilla-bloque16.png",
+    "bloque16|estacionamiento": "estacionamiento-bloque16.png",
+    "bloque16|estacionamientocarros": "estacionamientocarros-bloque16.png",
+    "bloque16|tren": "tren-bloque16.png",
+    "cafeteria1|capilla": "capilla-cafeteria1.png",
+    "cafeteria1|estacionamiento": "estacionamiento-cafeteria1.png",
+    "cafeteria1|estacionamientocarros": "estacionamientocarros-cafeteria1.png",
+    "cafeteria1|tren": "tren-cafeteria1.png",
+    "capilla|salud": "capilla-salud.png",
+    "estacionamientocarros|salud": "estacionamientocarros-salud.png",
+    "estacionamiento|salud": "estacionamiento-salud.png",
+    "salud|tren": "tren-salud.png"
+  }
 };

@@ -21,6 +21,10 @@ public class ServicioBloqueos {
         if (camino == null || camino.isBlank() || motivo == null || motivo.isBlank()) {
             throw new BloqueoInvalidoException("El camino y el motivo son obligatorios.");
         }
+        // Un camino solo puede tener un bloqueo activo: así, al levantarlo, queda libre de verdad
+        if (repoBloqueos.estaTramoBloqueado(camino)) {
+            throw new BloqueoInvalidoException("Ese camino ya tiene un bloqueo activo reportado.");
+        }
         Bloqueo nuevo = new Bloqueo(UUID.randomUUID().toString().substring(0, 8), camino, motivo, detalle);
         repoBloqueos.guardar(nuevo);
         return nuevo;

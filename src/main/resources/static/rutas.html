@@ -11,10 +11,8 @@
 
 <header class="cabecera">
     <div class="cabecera__fila">
-        <a class="marca" href="index.html">
-            <img class="marca__logo" src="img/LogoIC.png" alt="" width="40" height="40">
-            <span>IncluCampus</span>
-        </a>
+        <a class="marca" href="index.html">IncluCampus</a>
+
         <nav aria-label="Principal">
             <ul class="menu">
                 <li><a href="index.html">Inicio</a></li>
@@ -34,6 +32,7 @@
     <section class="tarjeta" aria-labelledby="titulo-resultado">
         <h1 id="titulo-resultado">Resultado de la ruta</h1>
         <p id="mensaje" class="mensaje" role="status"></p>
+        <p id="aviso-bloqueos" class="mensaje mensaje--aviso" role="status" hidden></p>
         <div id="resumen" hidden>
             <p><strong id="recorrido"></strong></p>
             <p>Perfil: <span id="perfil"></span></p>
@@ -41,30 +40,11 @@
                 <img id="imagen-ruta" src="" alt="">
                 <figcaption id="descripcion"></figcaption>
             </figure>
-            <p>Distancia aproximada: <span id="distancia"></span> m</p>
         </div>
         <a class="boton" href="index.html">Nueva búsqueda</a>
     </section>
     <footer class="pie">IncluCampus · Un campus para todos</footer>
 </main>
-<footer class="pie">
-    <div class="pie__fila">
-        <div class="pie__izquierda">
-            <img class="pie__logo-uam" src="img/LogoUAM.png" alt="Universidad Autónoma de Manizales - UAM">
-        </div>
-
-        <div class="pie__derecha">
-            <p class="pie__titulo">IncluCampus · Un campus para todos</p>
-            <nav class="pie__enlaces" aria-label="Enlaces del pie de página">
-                <a href="index.html">Inicio</a>
-                <a href="reportar.html">Reportar bloqueo</a>
-                <a href="bloqueos.html">Bloqueos activos</a>
-                <a href="login.html">Iniciar sesión</a>
-            </nav>
-            <p class="pie__copy">Proyecto académico · Universidad Autónoma de Manizales</p>
-        </div>
-    </div>
-</footer>
 <script src="js/accesibilidad.js"></script>
 <script src="js/rutas-datos.js"></script>
 <script src="js/rutas.js"></script>

@@ -37,9 +37,8 @@ function agregarLinea(padre, etiqueta, valor) {
 async function cargarBloqueos() {
   listaBloqueos.replaceChildren();
   try {
-    const [respBloqueos, respTramos, admin] = await Promise.all([
+    const [respBloqueos, admin] = await Promise.all([
       fetch("/api/bloqueos"),
-      fetch("/api/tramos"),
       esAdministrador()
     ]);
 
@@ -50,12 +49,6 @@ async function cargarBloqueos() {
     const todosLosBloqueos = await respBloqueos.json();
     const bloqueos = todosLosBloqueos.filter(function (b) {
       return b.estado === "ACTIVO";
-    });
-    const tramos = respTramos.ok ? await respTramos.json() : [];
-
-    const nombresTramos = {};
-    tramos.forEach(function (t) {
-      nombresTramos[t.id] = t.descripcion;
     });
 
     if (bloqueos.length === 0) {
@@ -70,7 +63,7 @@ async function cargarBloqueos() {
       const li = document.createElement("li");
       li.style.marginBottom = "1rem";
 
-      const nombreCamino = nombresTramos[b.tramoId] || b.camino || b.tramoId;
+      const nombreCamino = nombrePunto(b.camino || b.tramoId);
       const detalle = b.detalle || b.descripcion;
       const info = document.createElement("p");
       agregarLinea(info, "Camino", nombreCamino);

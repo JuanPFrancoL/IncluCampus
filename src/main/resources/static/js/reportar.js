@@ -18,29 +18,14 @@ function marcarInvalido(campo, invalido) {
   campo.setAttribute("aria-invalid", invalido ? "true" : "false");
 }
 
-async function cargarCaminos() {
+// Los puntos bloqueables salen de rutas-datos.js (PUNTOS_BLOQUEABLES)
+function cargarCaminos() {
   if (!selectCamino) return;
-  // Si el select ya tiene opciones cargadas desde el HTML (no está vacío), no las borramos
-  if (selectCamino.options.length > 1) return;
-
-  selectCamino.innerHTML = '<option value="">Cargando caminos...</option>';
-  try {
-    const resp = await fetch("/api/tramos");
-    if (!resp.ok) throw new Error("No se pudieron cargar los tramos.");
-
-    const tramos = await resp.json();
-    selectCamino.innerHTML = '<option value="">-- Selecciona un camino --</option>';
-
-    tramos.forEach(function (tramo) {
-      const opcion = document.createElement("option");
-      opcion.value = tramo.id;
-      opcion.textContent = tramo.descripcion || (tramo.origen.nombre + " ↔ " + tramo.destino.nombre);
-      selectCamino.appendChild(opcion);
-    });
-  } catch (error) {
-    selectCamino.innerHTML = '<option value="">Error al cargar caminos</option>';
-    mostrarMensaje("Error: no se pudieron cargar los caminos del campus.", true);
-  }
+  selectCamino.length = 0;
+  selectCamino.add(new Option("-- Elige el punto bloqueado --", ""));
+  Object.keys(PUNTOS_BLOQUEABLES).forEach(function (id) {
+    selectCamino.add(new Option(PUNTOS_BLOQUEABLES[id], id));
+  });
 }
 
 if (formulario) {
@@ -51,7 +36,7 @@ if (formulario) {
 
     if (!selectCamino || selectCamino.value === "") {
       marcarInvalido(selectCamino, true);
-      mostrarMensaje("Error: elige el camino bloqueado.", true);
+      mostrarMensaje("Error: elige el punto bloqueado.", true);
       if (selectCamino) selectCamino.focus();
       return;
     }
@@ -63,16 +48,12 @@ if (formulario) {
       return;
     }
 
-    const textoCamino = selectCamino.options[selectCamino.selectedIndex]
-      ? selectCamino.options[selectCamino.selectedIndex].textContent
-      : selectCamino.value;
-
     try {
       const resp = await fetch("/api/bloqueos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          camino: textoCamino,
+          camino: selectCamino.value,
           tramoId: selectCamino.value,
           motivo: selectMotivo.value,
           detalle: inputDetalle ? inputDetalle.value.trim() : ""

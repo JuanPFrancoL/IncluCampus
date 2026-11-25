@@ -68,7 +68,7 @@ async function cargarBloqueosAdmin() {
     const lista = document.createElement("ul");
     bloqueos.forEach(function (b) {
       const item = document.createElement("li");
-      const camino = b.camino || b.tramoId;
+      const camino = nombrePunto(b.camino || b.tramoId);
       const detalle = (b.detalle || b.descripcion) ? " — " + (b.detalle || b.descripcion) : "";
 
       const texto = document.createElement("span");
