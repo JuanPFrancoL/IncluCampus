@@ -11,6 +11,42 @@ function leer(clave) {
   try { return localStorage.getItem(clave); } catch (e) { return null; }
 }
 
+const btnToggle = document.getElementById("btn-accesibilidad-toggle");
+const menuAccesibilidad = document.getElementById("menu-accesibilidad");
+
+if (btnToggle && menuAccesibilidad) {
+  function setMenuAbierto(abierto) {
+    menuAccesibilidad.hidden = !abierto;
+    btnToggle.setAttribute("aria-expanded", String(abierto));
+    if (abierto) {
+      const primerBoton = menuAccesibilidad.querySelector("button");
+      if (primerBoton) primerBoton.focus();
+    }
+  }
+
+  btnToggle.addEventListener("click", function () {
+    const estaAbierto = btnToggle.getAttribute("aria-expanded") === "true";
+    setMenuAbierto(!estaAbierto);
+  });
+
+  document.addEventListener("click", function (evento) {
+    const estaAbierto = btnToggle.getAttribute("aria-expanded") === "true";
+    if (!estaAbierto) return;
+    if (!evento.target.closest(".accesibilidad-flotante")) {
+      menuAccesibilidad.hidden = true;
+      btnToggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  document.addEventListener("keydown", function (evento) {
+    if (evento.key === "Escape" && btnToggle.getAttribute("aria-expanded") === "true") {
+      menuAccesibilidad.hidden = true;
+      btnToggle.setAttribute("aria-expanded", "false");
+      btnToggle.focus();
+    }
+  });
+}
+
 function configurarBoton(idBoton, clase, clave) {
   const boton = document.getElementById(idBoton);
   if (!boton) return;
