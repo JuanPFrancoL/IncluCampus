@@ -16,4 +16,7 @@ public abstract class Cuenta implements Serializable {
 
     /** Cada tipo de cuenta dice qué rol tiene. */
     public abstract Rol getRol();
+
+    /** Cada tipo de cuenta responde si puede administrar (polimorfismo). */
+    public abstract boolean puedeAdministrar();
 }

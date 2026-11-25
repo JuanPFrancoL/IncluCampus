@@ -93,25 +93,4 @@ if (formulario) {
   });
 }
 
-async function resolverBloqueo(id) {
-  try {
-    const resp = await fetch(`/api/bloqueos/${id}/levantar`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Rol": sessionStorage.getItem("rol") || "ADMIN"
-      }
-    });
-
-    if (!resp.ok) {
-      alert("No se pudo resolver el bloqueo.");
-      return;
-    }
-
-    // Vuelve a cargar la lista en pantalla para que se actualice al instante
-    cargarBloqueos();
-  } catch (error) {
-    alert("Error de conexión al intentar habilitar el camino.");
-  }
-}
 cargarCaminos();

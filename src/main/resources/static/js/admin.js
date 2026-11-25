@@ -1,15 +1,9 @@
 const aviso = document.getElementById("aviso-acceso");
 const panel = document.getElementById("panel");
 
-function esAdministrador() {
-  return sessionStorage.getItem("rol") === "ADMIN";
-}
-
 async function cargarResumen() {
   try {
-    const resp = await fetch("/api/admin/resumen", {
-      headers: { "X-Rol": sessionStorage.getItem("rol") || "" }
-    });
+    const resp = await fetch("/api/admin/resumen");
     if (!resp.ok) return;
 
     const datos = await resp.json();
@@ -19,8 +13,8 @@ async function cargarResumen() {
       pResumen.id = "resumen-campus";
       panel.insertBefore(pResumen, panel.querySelector("ul"));
     }
-    pResumen.innerHTML =
-      "<strong>Estado del campus:</strong> " +
+    pResumen.textContent =
+      "Estado del campus: " +
       datos.totalLugares + " lugares · " +
       datos.totalTramos + " caminos · " +
       datos.bloqueosActivos + " bloqueo(s) activo(s).";
@@ -30,18 +24,22 @@ async function cargarResumen() {
 async function levantarBloqueo(id) {
   try {
     const resp = await fetch("/api/bloqueos/" + encodeURIComponent(id) + "/levantar", {
-      method: "PATCH",
-      headers: { "X-Rol": sessionStorage.getItem("rol") || "" }
+      method: "PATCH"
     });
     if (resp.ok) {
       await cargarResumen();
       await cargarBloqueosAdmin();
+    } else if (resp.status === 403) {
+      alert("Tu sesión de administrador terminó. Inicia sesión otra vez.");
+      window.location.href = "login.html";
     }
   } catch (e) {
     alert("Error al intentar levantar el bloqueo.");
   }
 }
 
+// Se usa textContent (no innerHTML): el motivo y el detalle los escribe cualquier persona,
+// y así no se puede colar código en la página del administrador.
 async function cargarBloqueosAdmin() {
   let contenedor = document.getElementById("admin-bloqueos");
   if (!contenedor) {
@@ -49,16 +47,21 @@ async function cargarBloqueosAdmin() {
     contenedor.id = "admin-bloqueos";
     panel.appendChild(contenedor);
   }
+  contenedor.replaceChildren();
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = "Gestión de bloqueos reportados";
+  contenedor.appendChild(titulo);
 
   try {
     const resp = await fetch("/api/bloqueos");
     if (!resp.ok) throw new Error();
     const bloqueos = await resp.json();
 
-    contenedor.innerHTML = "<h2>Gestión de bloqueos reportados</h2>";
-
     if (bloqueos.length === 0) {
-      contenedor.innerHTML += "<p>No hay bloqueos registrados actualmente.</p>";
+      const vacio = document.createElement("p");
+      vacio.textContent = "No hay bloqueos registrados actualmente.";
+      contenedor.appendChild(vacio);
       return;
     }
 
@@ -67,13 +70,12 @@ async function cargarBloqueosAdmin() {
       const item = document.createElement("li");
       const camino = b.camino || b.tramoId;
       const detalle = (b.detalle || b.descripcion) ? " — " + (b.detalle || b.descripcion) : "";
-      const esActivo = b.estado === "ACTIVO";
 
-      item.innerHTML =
-        "<strong>" + camino + "</strong> (" + b.motivo + ")" + detalle +
-        " — <em>Estado: " + b.estado + "</em> ";
+      const texto = document.createElement("span");
+      texto.textContent = camino + " (" + b.motivo + ")" + detalle + " — Estado: " + b.estado + " ";
+      item.appendChild(texto);
 
-      if (esActivo) {
+      if (b.estado === "ACTIVO") {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.textContent = "Levantar bloqueo";
@@ -88,22 +90,33 @@ async function cargarBloqueosAdmin() {
 
     contenedor.appendChild(lista);
   } catch (e) {
-    contenedor.innerHTML = "<h2>Gestión de bloqueos reportados</h2><p>No se pudieron cargar los bloqueos.</p>";
+    const error = document.createElement("p");
+    error.textContent = "No se pudieron cargar los bloqueos.";
+    contenedor.appendChild(error);
   }
 }
 
-if (esAdministrador()) {
-  document.getElementById("nombre-admin").textContent =
-    sessionStorage.getItem("nombre") || "administrador";
-  panel.hidden = false;
-  cargarResumen();
-  cargarBloqueosAdmin();
-} else {
-  aviso.hidden = false;
+async function iniciar() {
+  const sesion = await consultarSesion();
+
+  if (sesion.autenticado && sesion.rol === "ADMIN") {
+    document.getElementById("nombre-admin").textContent = sesion.nombre || "administrador";
+    panel.hidden = false;
+    cargarResumen();
+    cargarBloqueosAdmin();
+  } else {
+    aviso.hidden = false;
+  }
 }
 
-document.getElementById("btn-salir").addEventListener("click", function () {
-  sessionStorage.removeItem("rol");
-  sessionStorage.removeItem("nombre");
+document.getElementById("btn-salir").addEventListener("click", async function () {
+  try {
+    await fetch("/api/auth/logout", { method: "POST" });
+  } catch (e) { }
+  try {
+    sessionStorage.clear();
+  } catch (e) { }
   window.location.href = "login.html";
 });
+
+iniciar();
