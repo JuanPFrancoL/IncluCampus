@@ -238,6 +238,14 @@ main > h1 { font-size: 2rem; margin: 1rem 0 0.5rem; }
 }
 .boton:hover { background: var(--azul); border-color: var(--azul); }
 
+/* Evitar que la imagen de la ruta se salga del recuadro */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
 /* Mensajes: llevan texto (no solo color) para que se entiendan sin ver el color */
 .mensaje { margin: 1rem 0 0; padding: 0.75rem 1rem; border: 2px solid var(--borde); border-radius: 8px; }
 .mensaje:empty { display: none; }
