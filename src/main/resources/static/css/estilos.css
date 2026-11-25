@@ -252,6 +252,85 @@ main > h1 { font-size: 2rem; margin: 1rem 0 0.5rem; }
 }
 .login .tarjeta { max-width: none; margin: 0; }
 
+/* ===== Botón flotante y menú de accesibilidad ===== */
+.accesibilidad-flotante {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.accesibilidad-boton {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 999px;
+  border: 2px solid var(--texto);
+  background: var(--superficie);
+  color: var(--azul);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.accesibilidad-boton:hover {
+  transform: scale(1.05);
+}
+
+.accesibilidad-boton[aria-expanded="true"] {
+  background: var(--azul);
+  color: var(--texto-boton);
+  border-color: var(--azul);
+}
+
+.accesibilidad-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  min-width: 12.5rem;
+  background: var(--superficie);
+  border: 2px solid var(--borde);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.accesibilidad-menu[hidden] {
+  display: none;
+}
+
+.accesibilidad-menu button {
+  min-height: 2.75rem;
+  padding: 0 1rem;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 2px solid var(--texto);
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.accesibilidad-menu button[aria-pressed="true"] {
+  background: var(--texto);
+  color: var(--superficie);
+}
+
+html.alto-contraste .accesibilidad-boton,
+html.alto-contraste .accesibilidad-menu {
+  box-shadow: none;
+  border-color: var(--enfoque);
+}
+
 /* ===== Pie ===== */
 .pie {
   margin-top: 2rem;

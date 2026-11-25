@@ -24,10 +24,7 @@
             </ul>
         </nav>
 
-        <div class="herramientas" role="group" aria-label="Opciones de accesibilidad">
-            <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
-            <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
-        </div>
+
     </div>
 </header>
 
@@ -76,6 +73,26 @@
         <p id="mensaje" class="mensaje" role="status"></p>
     </section>
 </main>
+<div class="accesibilidad-flotante">
+    <div id="menu-accesibilidad" class="accesibilidad-menu" role="region" aria-label="Opciones de accesibilidad" hidden>
+        <button type="button" id="btn-letra" aria-pressed="false">Letra grande</button>
+        <button type="button" id="btn-contraste" aria-pressed="false">Alto contraste</button>
+    </div>
+
+    <button type="button"
+            id="btn-accesibilidad-toggle"
+            class="accesibilidad-boton"
+            aria-expanded="false"
+            aria-controls="menu-accesibilidad"
+            aria-label="Abrir opciones de accesibilidad">
+        <!-- Ícono universal de accesibilidad -->
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" fill="currentColor">
+            <circle cx="12" cy="5.2" r="2.1"/>
+            <path d="M5 9.2h14v2.1h-4.8v9.7h-2.2v-5.5h-2v5.5H7.8v-9.7H5V9.2z"/>
+        </svg>
+    </button>
+</div>
+
 <footer class="pie">
     <div class="pie__fila">
         <div class="pie__izquierda">
