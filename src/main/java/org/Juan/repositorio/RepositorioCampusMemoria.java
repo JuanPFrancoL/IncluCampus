@@ -7,13 +7,29 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * Repositorio que guarda el mapa del campus en memoria. Al crearse arma
+ * todos los lugares y todos los caminos que los unen, y despues solo los
+ * entrega cuando alguien los pide. Los datos estan escritos directamente
+ * en el codigo, no vienen de una base de datos, asi que no cambian mientras
+ * el programa este corriendo.
+ *
+ * @version 1.0
+ */
 
 @Repository
 public class RepositorioCampusMemoria implements RepositorioCampus {
-
+    /** Todos los lugares del campus: los que se pueden escoger y los puntos de paso. */
     private final List<Ubicacion> ubicaciones = new ArrayList<>();
+    /** Todos los caminos que unen esos lugares. Juntos forman el grafo del campus. */
     private final List<Tramo> tramos = new ArrayList<>();
 
+    /**
+     * Arma el mapa completo del campus. Primero crea los 18 lugares que
+     * la persona puede escoger y 3 puntos de paso, luego los guarda en la
+     * lista de ubicaciones, y al final crea los tramos que los conectan,
+     * agrupados por zonas. No recibe parametros porque el mapa es fijo.
+     */
     public RepositorioCampusMemoria() {
         // 1. Los 18 lugares seleccionables (IDs idénticos a rutas-datos.js)
         Ubicacion banoBiblioteca = new PuntoServicio("banobiblioteca", "Baño de la Biblioteca");
@@ -78,11 +94,25 @@ public class RepositorioCampusMemoria implements RepositorioCampus {
         tramos.add(new TramoPlano(estCarros, estMotos, 25));
     }
 
+    /**
+     * Devuelve todos los lugares del campus, incluidos los puntos de paso.
+     * Entrega una copia de la lista, asi quien la reciba no puede cambiar
+     * la lista original.
+     *
+     * @return una copia de la lista con todas las ubicaciones
+     */
     @Override
     public List<Ubicacion> obtenerTodas() {
         return new ArrayList<>(ubicaciones);
     }
 
+    /**
+     * Busca un lugar por su id, sin importar si esta en mayusculas o minusculas.
+     *
+     * @param id id del lugar que se busca (por ejemplo, "bloquef")
+     * @return el lugar que tiene ese id
+     * @throws UbicacionNoEncontradaException si no existe ningun lugar con ese id
+     */
     @Override
     public Ubicacion buscarPorId(String id) {
         for (Ubicacion ubicacion : ubicaciones) {
@@ -93,6 +123,12 @@ public class RepositorioCampusMemoria implements RepositorioCampus {
         throw new UbicacionNoEncontradaException("No se encontró el lugar: " + id);
     }
 
+    /**
+     * Devuelve todos los tramos del campus. Entrega una copia de la lista,
+     * asi quien la reciba no puede cambiar la lista original.
+     *
+     * @return una copia de la lista con todos los tramos
+     */
     @Override
     public List<Tramo> obtenerTramos() {
         return new ArrayList<>(tramos);
