@@ -91,9 +91,19 @@ a { color: var(--azul); }
   gap: 0.75rem 1.5rem;
 }
 .marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
   font-size: 1.5rem;
   font-weight: 700;
   text-decoration: none;
+}
+.marca__logo {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 .menu {
   list-style: none;
@@ -244,9 +254,81 @@ main > h1 { font-size: 2rem; margin: 1rem 0 0.5rem; }
 
 /* ===== Pie ===== */
 .pie {
-  max-width: 64rem;
-  margin: 0 auto;
-  padding: 1rem;
+  margin-top: 2rem;
+  background: var(--superficie);
+  border-top: 2px solid var(--borde);
   color: var(--texto-suave);
   font-size: 1rem;
+}
+.pie__fila {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem 2rem;
+}
+.pie__izquierda {
+  display: flex;
+  align-items: center;
+}
+.pie__logo-uam {
+  display: block;
+  height: 15rem;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+.pie__derecha {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  text-align: right;
+  gap: 0.4rem;
+}
+.pie__titulo {
+  margin: 0;
+  font-weight: 700;
+  color: var(--texto);
+}
+.pie__enlaces {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem 1rem;
+}
+.pie__enlaces a {
+  color: var(--texto);
+  text-decoration: none;
+}
+.pie__enlaces a:hover {
+  text-decoration: underline;
+}
+.pie__copy {
+  margin: 0;
+  font-size: 0.925rem;
+}
+
+/* En alto contraste, enmarcamos ligeramente los PNG con fondo blanco para mantener legibilidad */
+html.alto-contraste .marca__logo,
+html.alto-contraste .pie__logo-uam {
+  background: #FFFFFF;
+  padding: 0.25rem;
+  border-radius: 6px;
+}
+
+@media (max-width: 40rem) {
+  .pie__fila {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .pie__derecha {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .pie__enlaces {
+    justify-content: flex-start;
+  }
 }
