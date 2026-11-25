@@ -1,7 +1,12 @@
 const listaBloqueos = document.getElementById("lista-bloqueos");
 const mensajeBloqueos = document.getElementById("mensaje-bloqueos");
 
+function esAdministrador() {
+  return sessionStorage.getItem("rol") === "ADMIN";
+}
+
 function mostrarMensaje(texto, esError) {
+  if (!mensajeBloqueos) return;
   mensajeBloqueos.textContent = texto;
   mensajeBloqueos.classList.toggle("mensaje--error", esError);
 }
@@ -9,41 +14,33 @@ function mostrarMensaje(texto, esError) {
 async function resolverBloqueo(id) {
   try {
     const resp = await fetch("/api/bloqueos/" + encodeURIComponent(id) + "/levantar", {
-      method: "PATCH"
+      method: "PATCH",
+      headers: {
+        "X-Rol": sessionStorage.getItem("rol") || ""
+      }
     });
 
-    const datos = await resp.json().catch(function () { return {}; });
+    const datos = await resp.json();
     if (!resp.ok) {
       mostrarMensaje("Error: " + (datos.mensaje || "No se pudo resolver el bloqueo."), true);
       return;
     }
 
-    mostrarMensaje(datos.mensaje || "Bloqueo resuelto.", false);
+    mostrarMensaje(datos.mensaje || "Bloqueo resuelto y camino habilitado.", false);
     cargarBloqueos();
   } catch (error) {
-    mostrarMensaje("Error de conexión con el servidor.", true);
+    mostrarMensaje("Error de conexión al intentar resolver el bloqueo.", true);
   }
 }
 
-// Agrega una línea "Etiqueta: valor" usando textContent (nada de innerHTML)
-function agregarLinea(padre, etiqueta, valor) {
-  const negrita = document.createElement("strong");
-  negrita.textContent = etiqueta + ": ";
-  padre.appendChild(negrita);
-  padre.appendChild(document.createTextNode(valor));
-  padre.appendChild(document.createElement("br"));
-}
-
 async function cargarBloqueos() {
-  listaBloqueos.replaceChildren();
-  try {
-    const [respBloqueos, admin] = await Promise.all([
-      fetch("/api/bloqueos"),
-      esAdministrador()
-    ]);
+  if (!listaBloqueos) return;
+  listaBloqueos.innerHTML = "";
 
+  try {
+    const respBloqueos = await fetch("/api/bloqueos", { cache: "no-store" });
     if (!respBloqueos.ok) {
-      throw new Error("No se pudieron consultar los bloqueos.");
+      throw new Error("HTTP " + respBloqueos.status);
     }
 
     const todosLosBloqueos = await respBloqueos.json();
@@ -63,19 +60,15 @@ async function cargarBloqueos() {
       const li = document.createElement("li");
       li.style.marginBottom = "1rem";
 
-      const nombreCamino = nombrePunto(b.camino || b.tramoId);
+      const nombreCamino = b.camino || b.tramoId;
       const detalle = b.detalle || b.descripcion;
       const info = document.createElement("p");
-      agregarLinea(info, "Camino", nombreCamino);
-      agregarLinea(info, "Motivo", b.motivo);
-      if (detalle) {
-        agregarLinea(info, "Detalle", detalle);
-      }
+      info.innerHTML = "<strong>Camino:</strong> " + nombreCamino +
+        "<br><strong>Motivo:</strong> " + b.motivo +
+        (detalle ? "<br><strong>Detalle:</strong> " + detalle : "");
       li.appendChild(info);
 
-      // El botón solo se muestra al administrador. Aunque alguien lo fuerce desde la consola,
-      // el servidor responde 403 si no hay sesión de administrador.
-      if (admin) {
+      if (esAdministrador()) {
         const btnResolver = document.createElement("button");
         btnResolver.type = "button";
         btnResolver.className = "boton";
@@ -91,7 +84,8 @@ async function cargarBloqueos() {
 
     listaBloqueos.appendChild(ul);
   } catch (error) {
-    mostrarMensaje("Error: no se pudieron cargar los bloqueos. Revisa que el servidor esté encendido.", true);
+    console.error("Error cargando bloqueos:", error);
+    mostrarMensaje("Error al cargar bloqueos (" + error.message + ").", true);
   }
 }
 

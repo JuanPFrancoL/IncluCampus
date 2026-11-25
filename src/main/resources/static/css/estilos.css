@@ -331,6 +331,45 @@ html.alto-contraste .accesibilidad-menu {
   border-color: var(--enfoque);
 }
 
+/* ===== Indicador flotante de ubicación actual ===== */
+.indicador-pagina {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 40;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1rem;
+  background: var(--superficie);
+  color: var(--texto);
+  border: 2px solid var(--borde);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  line-height: 1.2;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.indicador-pagina__etiqueta {
+  color: var(--texto-suave);
+}
+
+.indicador-pagina__valor {
+  font-weight: 700;
+  color: var(--azul);
+}
+
+html.alto-contraste .indicador-pagina {
+  box-shadow: none;
+  border-color: var(--enfoque);
+}
+
+@media (max-width: 40rem) {
+  .indicador-pagina {
+    bottom: 5.25rem; /* evita chocar con el botón flotante de accesibilidad en pantallas pequeñas */
+  }
+}
+
 /* ===== Pie ===== */
 .pie {
   margin-top: 2rem;

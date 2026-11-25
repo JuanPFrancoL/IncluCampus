@@ -1,14 +1,20 @@
 package org.Juan.modelo;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 
+@Entity
 public class Bloqueo {
-    private final String id;
-    private final String tramoId;
-    private final String motivo;
-    private final String descripcion;
+    @Id
+    private String id;
+    private String tramoId;
+    private String motivo;
+    private String descripcion;
     private String estado; // ACTIVO, RESUELTO
-    private final LocalDateTime fecha;
+    private LocalDateTime fecha;
+
+    protected Bloqueo() {}
 
     public Bloqueo(String id, String tramoId, String motivo, String descripcion) {
         this.id = id;

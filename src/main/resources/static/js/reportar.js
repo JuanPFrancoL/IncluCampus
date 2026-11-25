@@ -5,10 +5,7 @@ const inputDetalle = document.getElementById("detalle") || document.getElementBy
 const mensaje = document.getElementById("mensaje-reportar") || document.getElementById("mensaje");
 
 function mostrarMensaje(texto, esError) {
-  if (!mensaje) {
-    alert(texto);
-    return;
-  }
+  if (!mensaje) return;
   mensaje.textContent = texto;
   mensaje.classList.toggle("mensaje--error", esError);
 }
@@ -18,14 +15,30 @@ function marcarInvalido(campo, invalido) {
   campo.setAttribute("aria-invalid", invalido ? "true" : "false");
 }
 
-// Los puntos bloqueables salen de rutas-datos.js (PUNTOS_BLOQUEABLES)
-function cargarCaminos() {
+async function cargarCaminos() {
   if (!selectCamino) return;
-  selectCamino.length = 0;
-  selectCamino.add(new Option("-- Elige el punto bloqueado --", ""));
-  Object.keys(PUNTOS_BLOQUEABLES).forEach(function (id) {
-    selectCamino.add(new Option(PUNTOS_BLOQUEABLES[id], id));
-  });
+
+  selectCamino.innerHTML = '<option value="">Cargando caminos...</option>';
+  try {
+    const resp = await fetch("/api/tramos");
+    if (!resp.ok) throw new Error("HTTP " + resp.status);
+
+    const tramos = await resp.json();
+    selectCamino.innerHTML = '<option value="">-- Selecciona un camino --</option>';
+
+    tramos.forEach(function (tramo) {
+      const opcion = document.createElement("option");
+      opcion.value = tramo.id;
+      const nombreOrigen = tramo.origen && tramo.origen.nombre ? tramo.origen.nombre : "";
+      const nombreDestino = tramo.destino && tramo.destino.nombre ? tramo.destino.nombre : "";
+      opcion.textContent = tramo.descripcion || (nombreOrigen + " ↔ " + nombreDestino) || tramo.id;
+      selectCamino.appendChild(opcion);
+    });
+  } catch (error) {
+    console.error("Error cargando tramos:", error);
+    selectCamino.innerHTML = '<option value="">Error al cargar caminos</option>';
+    mostrarMensaje("Error al cargar caminos: " + error.message, true);
+  }
 }
 
 if (formulario) {
@@ -36,7 +49,7 @@ if (formulario) {
 
     if (!selectCamino || selectCamino.value === "") {
       marcarInvalido(selectCamino, true);
-      mostrarMensaje("Error: elige el punto bloqueado.", true);
+      mostrarMensaje("Error: elige el camino bloqueado.", true);
       if (selectCamino) selectCamino.focus();
       return;
     }
@@ -48,12 +61,16 @@ if (formulario) {
       return;
     }
 
+    const textoCamino = selectCamino.options[selectCamino.selectedIndex]
+      ? selectCamino.options[selectCamino.selectedIndex].textContent
+      : selectCamino.value;
+
     try {
       const resp = await fetch("/api/bloqueos", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          camino: selectCamino.value,
+          camino: textoCamino,
           tramoId: selectCamino.value,
           motivo: selectMotivo.value,
           detalle: inputDetalle ? inputDetalle.value.trim() : ""

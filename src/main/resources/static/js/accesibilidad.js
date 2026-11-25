@@ -67,3 +67,20 @@ function configurarBoton(idBoton, clase, clave) {
 
 configurarBoton("btn-letra", "letra-grande", "letraGrande");
 configurarBoton("btn-contraste", "alto-contraste", "altoContraste");
+
+(function () {
+  const destinoNombre = document.getElementById("nombre-pagina-actual");
+  if (!destinoNombre) return;
+
+  const enlaceActual = document.querySelector('.menu a[aria-current="page"]');
+  if (enlaceActual) {
+    destinoNombre.textContent = enlaceActual.textContent.trim();
+    return;
+  }
+
+  // Si estás en una vista sin enlace en el menú (por ejemplo rutas.html), toma lo que va después de "IncluCampus - "
+  const partesTitulo = document.title.split("-");
+  if (partesTitulo.length > 1) {
+    destinoNombre.textContent = partesTitulo.slice(1).join("-").trim();
+  }
+})();
